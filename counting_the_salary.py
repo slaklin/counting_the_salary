@@ -19,13 +19,11 @@ def calculating_the_number_vacancies_hh(language):
         }
         response = requests.get(url, params=payload)
         response.raise_for_status()
-        print(response.status_code)
         job_description = response.json()
         page += 1
         list_of_vacancies.append(job_description)
         job_openings = job_description['found']
         number_of_vacancies.append(job_openings)
-    print(number_of_vacancies)
     return number_of_vacancies, list_of_vacancies
 
 
@@ -109,18 +107,17 @@ def computation_work_for_vacancies(average_salary):
 
 def main():
     vacancies = ['JavaScript', 'Java', 'Python', 'Ruby', 'PHP', 'C++', 'CSS', 'C#', 'C']
-    # vacancies = ['C++', 'CSS', 'C#', 'C']
-    # salary_table_sj = [
-    # ['SuperJob Moscow'],
-    # ['Язык программирования', 'Вакансий найдено', 'Вакансий обработано', 'Средняя зарплата']
-    # ]
-    # for language in vacancies:
-    #     number_of_vacancies, list_of_vacancies = calculating_the_number_vacancies_sj(language)
-    #     average_salary = predict_rub_salary_for_sj(list_of_vacancies)
-    #     statistical_average_salary, list_jobs_with_salary = computation_work_for_vacancies(average_salary)
-    #     salary_table_sj.append([language, number_of_vacancies[0], list_jobs_with_salary[0], statistical_average_salary[0]])
-    # table_superjob = AsciiTable(salary_table_sj)
-    # print(table_superjob.table)
+    salary_table_sj = [
+    ['SuperJob Moscow'],
+    ['Язык программирования', 'Вакансий найдено', 'Вакансий обработано', 'Средняя зарплата']
+    ]
+    for language in vacancies:
+        number_of_vacancies, list_of_vacancies = calculating_the_number_vacancies_sj(language)
+        average_salary = predict_rub_salary_for_sj(list_of_vacancies)
+        statistical_average_salary, list_jobs_with_salary = computation_work_for_vacancies(average_salary)
+        salary_table_sj.append([language, number_of_vacancies[0], list_jobs_with_salary[0], statistical_average_salary[0]])
+    table_superjob = AsciiTable(salary_table_sj)
+    print(table_superjob.table)
 
     salary_table_hh = [
     ['HeadHunter Moscow'],
