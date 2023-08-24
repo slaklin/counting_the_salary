@@ -100,7 +100,7 @@ def calculation_of_processed_vacancies(average_salary):
 
 def main():
     load_dotenv()
-    super_job_secret_key = os.getenv("SECRET_KEY")
+    super_job_secret_key = os.getenv("SUPERJOB_TOKEN")
     programming_languages = ['JavaScript', 'Java', 'Python', 'Ruby', 'PHP', 'C++', 'CSS', 'C#', 'C']
     salary_table_sj = [
         ['SuperJob Moscow'],

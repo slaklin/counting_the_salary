@@ -14,7 +14,7 @@ pip install -r requirements.txt
 
 #### Environment variables
 
-- SECRET_KEY
+- SUPERJOB_TOKEN
 
 1. Place the `.env` file in the root folder of your project.
 2. `.env` contains text data without quotes.
@@ -23,7 +23,7 @@ For example, if you print `.env` content, you will see:
 
 ```
 $ cat .env
-SECRET_KEY=1a5d754733b015ghty67660143c70238efa4esad1taec48
+SUPERJOB_TOKEN=1a5d754733b015ghty67660143c70238efa4esad1taec48
 ```
 ## Example of running a script
 ```
