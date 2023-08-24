@@ -6,31 +6,29 @@ from terminaltables import AsciiTable
 
 
 def calculating_the_number_vacancies_hh(language):
-    list_the_number_of_vacancies = []
-    list_of_vacancies = []
+    number_of_vacancies = []
+    information_about_vacancies = []
     page = 0
     pages_number = 3
     while page < pages_number:
         url = 'https://api.hh.ru/vacancies/'
         payload = {
-            "text": f'{language}',
-            "area": 1,
-            "page": f'{page}',
+            'text': f'{language}',
+            'area': 1,
+            'page': f'{page}',
         }
         response = requests.get(url, params=payload)
         response.raise_for_status()
-        information_about_vacancies = response.json()
         page += 1
-        list_of_vacancies.append(information_about_vacancies)
-        number_of_vacancies = information_about_vacancies['found']
-        list_the_number_of_vacancies.append(number_of_vacancies)
-    return list_the_number_of_vacancies, list_of_vacancies
+        information_about_vacancies.append(response.json())
+        number_of_vacancies.append(response.json()['found'])
+    return number_of_vacancies, information_about_vacancies
 
 
-def predict_rub_salary_for_hh(list_of_vacancies):
+def predict_rub_salary_for_hh(information_about_vacancies):
     average_salary = []
-    for number in range(len(list_of_vacancies)):
-        for vacancy in list_of_vacancies[number]['items']:
+    for number in range(len(information_about_vacancies)):
+        for vacancy in information_about_vacancies[number]['items']:
             if vacancy['salary'] is None or vacancy['salary']['currency'] != 'RUR':
                 average_salary.append(None)
             else:
@@ -49,28 +47,26 @@ def predict_rub_salary_for_hh(list_of_vacancies):
 def calculating_the_number_vacancies_sj(language):
     load_dotenv()
     super_job_secret_key = os.getenv("SECRET_KEY")
-    list_the_number_of_vacancies = []
-    list_of_vacancies = []
+    number_of_vacancies = []
+    information_about_vacancies = []
     page = 0
     pages_number = 3
     while page < pages_number:
         url = 'https://api.superjob.ru/2.0/vacancies/'
         headers = {
-            "X-Api-App-Id": super_job_secret_key,
+            'X-Api-App-Id': super_job_secret_key,
         }
         params = {
-            'town': "Москва",
+            'town': 'Москва',
             'keyword': f'{language}',
-            "page": f'{page}',
+            'page': f'{page}',
         }
         response = requests.get(url, params=params, headers=headers)
         response.raise_for_status()
-        information_about_vacancies = response.json()
         page += 1
-        list_of_vacancies.append(information_about_vacancies)
-        number_of_vacancies = information_about_vacancies['total']
-        list_the_number_of_vacancies.append(number_of_vacancies)
-    return list_the_number_of_vacancies, list_of_vacancies
+        information_about_vacancies.append(response.json())
+        number_of_vacancies.append(response.json()['total'])
+    return number_of_vacancies, information_about_vacancies
 
 
 def predict_rub_salary_for_sj(list_of_vacancies):
@@ -112,11 +108,11 @@ def main():
         ['Язык программирования', 'Вакансий найдено', 'Вакансий обработано', 'Средняя зарплата']
     ]
     for language in programming_languages:
-        list_the_number_of_vacancies, list_of_vacancies = calculating_the_number_vacancies_sj(language)
-        average_salary = predict_rub_salary_for_sj(list_of_vacancies)
+        number_of_vacancies, information_about_vacancies = calculating_the_number_vacancies_sj(language)
+        average_salary = predict_rub_salary_for_sj(information_about_vacancies)
         statistical_average_salary, list_jobs_with_salary = computation_work_for_vacancies(average_salary)
         salary_table_sj.append(
-            [language, list_the_number_of_vacancies[0], list_jobs_with_salary[0], statistical_average_salary[0]]
+            [language, number_of_vacancies[0], list_jobs_with_salary[0], statistical_average_salary[0]]
         )
     table_superjob = AsciiTable(salary_table_sj)
     print(table_superjob.table)
@@ -126,11 +122,11 @@ def main():
         ['Язык программирования', 'Вакансий найдено', 'Вакансий обработано', 'Средняя зарплата']
     ]
     for language in programming_languages:
-        list_the_number_of_vacancies, list_of_vacancies = calculating_the_number_vacancies_hh(language)
-        average_salary = predict_rub_salary_for_hh(list_of_vacancies)
+        number_of_vacancies, information_about_vacancies = calculating_the_number_vacancies_hh(language)
+        average_salary = predict_rub_salary_for_hh(information_about_vacancies)
         statistical_average_salary, list_jobs_with_salary = computation_work_for_vacancies(average_salary)
         salary_table_hh.append(
-            [language, list_the_number_of_vacancies[0], list_jobs_with_salary[0], statistical_average_salary[0]]
+            [language, number_of_vacancies[0], list_jobs_with_salary[0], statistical_average_salary[0]]
         )
     table_headhunter = AsciiTable(salary_table_hh)
     print(table_headhunter.table)
