@@ -12,9 +12,9 @@ def calculates_the_number_vacancies_hh(language):
     while True:
         url = 'https://api.hh.ru/vacancies/'
         payload = {
-            'text': f'{language}',
+            'text': language,
             'area': 1,
-            'page': f'{page}',
+            'page': page,
         }
         response = requests.get(url, params=payload)
         response.raise_for_status()
@@ -57,8 +57,8 @@ def calculates_the_number_vacancies_sj(language, super_job_secret_key):
         }
         params = {
             'town': 'Москва',
-            'keyword': f'{language}',
-            'page': f'{page}',
+            'keyword': language,
+            'page': page,
         }
         response = requests.get(url, params=params, headers=headers)
         response.raise_for_status()
