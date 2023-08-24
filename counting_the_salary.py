@@ -44,9 +44,7 @@ def calculates_the_average_salary_hh(information_about_vacancies):
     return average_salary
 
 
-def calculates_the_number_vacancies_sj(language):
-    load_dotenv()
-    super_job_secret_key = os.getenv("SECRET_KEY")
+def calculates_the_number_vacancies_sj(language, super_job_secret_key):
     vacancies_of_number = []
     information_about_vacancies = []
     page = 0
@@ -101,13 +99,16 @@ def calculation_of_processed_vacancies(average_salary):
 
 
 def main():
+    load_dotenv()
+    super_job_secret_key = os.getenv("SECRET_KEY")
     programming_languages = ['JavaScript', 'Java', 'Python', 'Ruby', 'PHP', 'C++', 'CSS', 'C#', 'C']
     salary_table_sj = [
         ['SuperJob Moscow'],
         ['Язык программирования', 'Вакансий найдено', 'Вакансий обработано', 'Средняя зарплата']
     ]
     for language in programming_languages:
-        vacancies_of_number, information_about_vacancies = calculates_the_number_vacancies_sj(language)
+        vacancies_of_number, information_about_vacancies = calculates_the_number_vacancies_sj(language,
+                                                                                              super_job_secret_key)
         average_salary = calculates_the_average_salary_sj(information_about_vacancies)
         statistical_average_salary, jobs_with_salary = calculation_of_processed_vacancies(average_salary)
         salary_table_sj.append(
