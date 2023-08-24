@@ -108,27 +108,30 @@ def computation_work_for_vacancies(average_salary):
 def main():
     programming_languages = ['JavaScript', 'Java', 'Python', 'Ruby', 'PHP', 'C++', 'CSS', 'C#', 'C']
     salary_table_sj = [
-    ['SuperJob Moscow'],
-    ['Язык программирования', 'Вакансий найдено', 'Вакансий обработано', 'Средняя зарплата']
+        ['SuperJob Moscow'],
+        ['Язык программирования', 'Вакансий найдено', 'Вакансий обработано', 'Средняя зарплата']
     ]
     for language in programming_languages:
         list_the_number_of_vacancies, list_of_vacancies = calculating_the_number_vacancies_sj(language)
         average_salary = predict_rub_salary_for_sj(list_of_vacancies)
         statistical_average_salary, list_jobs_with_salary = computation_work_for_vacancies(average_salary)
-        salary_table_sj.append([language, list_the_number_of_vacancies[0], list_jobs_with_salary[0], statistical_average_salary[0]])
+        salary_table_sj.append(
+            [language, list_the_number_of_vacancies[0], list_jobs_with_salary[0], statistical_average_salary[0]]
+        )
     table_superjob = AsciiTable(salary_table_sj)
     print(table_superjob.table)
 
     salary_table_hh = [
-    ['HeadHunter Moscow'],
-    ['Язык программирования', 'Вакансий найдено', 'Вакансий обработано', 'Средняя зарплата']
+        ['HeadHunter Moscow'],
+        ['Язык программирования', 'Вакансий найдено', 'Вакансий обработано', 'Средняя зарплата']
     ]
     for language in programming_languages:
         list_the_number_of_vacancies, list_of_vacancies = calculating_the_number_vacancies_hh(language)
         average_salary = predict_rub_salary_for_hh(list_of_vacancies)
         statistical_average_salary, list_jobs_with_salary = computation_work_for_vacancies(average_salary)
         salary_table_hh.append(
-            [language, list_the_number_of_vacancies[0], list_jobs_with_salary[0], statistical_average_salary[0]])
+            [language, list_the_number_of_vacancies[0], list_jobs_with_salary[0], statistical_average_salary[0]]
+        )
     table_headhunter = AsciiTable(salary_table_hh)
     print(table_headhunter.table)
 
