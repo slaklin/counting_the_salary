@@ -2,7 +2,7 @@
 This project uses the web services api hh.ru and superjob.ru to search for programmer vacancies in various programming languages and identify the average salary for each of them separately. Outputs the result for services in the form of a table.
 
 ## How to install
-1. Create [api.superjob](https://api.superjob.ru/2.0/) Generate API Key for work with API.
+1. Create [api.superjob](https://api.superjob.ru/) Generate API Key for work with API.
 
 #### Requirements
 
