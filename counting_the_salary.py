@@ -6,10 +6,10 @@ from terminaltables import AsciiTable
 
 
 def calculating_the_number_vacancies_hh(language):
-    number_of_vacancies = []
+    list_the_number_of_vacancies = []
     list_of_vacancies = []
     page = 0
-    pages_number = 18
+    pages_number = 3
     while page < pages_number:
         url = 'https://api.hh.ru/vacancies/'
         payload = {
@@ -19,12 +19,12 @@ def calculating_the_number_vacancies_hh(language):
         }
         response = requests.get(url, params=payload)
         response.raise_for_status()
-        job_description = response.json()
+        information_about_vacancies = response.json()
         page += 1
-        list_of_vacancies.append(job_description)
-        job_openings = job_description['found']
-        number_of_vacancies.append(job_openings)
-    return number_of_vacancies, list_of_vacancies
+        list_of_vacancies.append(information_about_vacancies)
+        number_of_vacancies = information_about_vacancies['found']
+        list_the_number_of_vacancies.append(number_of_vacancies)
+    return list_the_number_of_vacancies, list_of_vacancies
 
 
 def predict_rub_salary_for_hh(list_of_vacancies):
@@ -49,10 +49,10 @@ def predict_rub_salary_for_hh(list_of_vacancies):
 def calculating_the_number_vacancies_sj(language):
     load_dotenv()
     super_job_secret_key = os.getenv("SECRET_KEY")
-    number_of_vacancies = []
+    list_the_number_of_vacancies = []
     list_of_vacancies = []
     page = 0
-    pages_number = 18
+    pages_number = 3
     while page < pages_number:
         url = 'https://api.superjob.ru/2.0/vacancies/'
         headers = {
@@ -65,12 +65,12 @@ def calculating_the_number_vacancies_sj(language):
         }
         response = requests.get(url, params=params, headers=headers)
         response.raise_for_status()
-        job_description = response.json()
+        information_about_vacancies = response.json()
         page += 1
-        list_of_vacancies.append(job_description)
-        job_openings = job_description['total']
-        number_of_vacancies.append(job_openings)
-    return number_of_vacancies, list_of_vacancies
+        list_of_vacancies.append(information_about_vacancies)
+        number_of_vacancies = information_about_vacancies['total']
+        list_the_number_of_vacancies.append(number_of_vacancies)
+    return list_the_number_of_vacancies, list_of_vacancies
 
 
 def predict_rub_salary_for_sj(list_of_vacancies):
@@ -106,16 +106,16 @@ def computation_work_for_vacancies(average_salary):
 
 
 def main():
-    vacancies = ['JavaScript', 'Java', 'Python', 'Ruby', 'PHP', 'C++', 'CSS', 'C#', 'C']
+    programming_languages = ['JavaScript', 'Java', 'Python', 'Ruby', 'PHP', 'C++', 'CSS', 'C#', 'C']
     salary_table_sj = [
     ['SuperJob Moscow'],
     ['Язык программирования', 'Вакансий найдено', 'Вакансий обработано', 'Средняя зарплата']
     ]
-    for language in vacancies:
-        number_of_vacancies, list_of_vacancies = calculating_the_number_vacancies_sj(language)
+    for language in programming_languages:
+        list_the_number_of_vacancies, list_of_vacancies = calculating_the_number_vacancies_sj(language)
         average_salary = predict_rub_salary_for_sj(list_of_vacancies)
         statistical_average_salary, list_jobs_with_salary = computation_work_for_vacancies(average_salary)
-        salary_table_sj.append([language, number_of_vacancies[0], list_jobs_with_salary[0], statistical_average_salary[0]])
+        salary_table_sj.append([language, list_the_number_of_vacancies[0], list_jobs_with_salary[0], statistical_average_salary[0]])
     table_superjob = AsciiTable(salary_table_sj)
     print(table_superjob.table)
 
@@ -123,12 +123,12 @@ def main():
     ['HeadHunter Moscow'],
     ['Язык программирования', 'Вакансий найдено', 'Вакансий обработано', 'Средняя зарплата']
     ]
-    for language in vacancies:
-        number_of_vacancies, list_of_vacancies = calculating_the_number_vacancies_hh(language)
+    for language in programming_languages:
+        list_the_number_of_vacancies, list_of_vacancies = calculating_the_number_vacancies_hh(language)
         average_salary = predict_rub_salary_for_hh(list_of_vacancies)
         statistical_average_salary, list_jobs_with_salary = computation_work_for_vacancies(average_salary)
         salary_table_hh.append(
-            [language, number_of_vacancies[0], list_jobs_with_salary[0], statistical_average_salary[0]])
+            [language, list_the_number_of_vacancies[0], list_jobs_with_salary[0], statistical_average_salary[0]])
     table_headhunter = AsciiTable(salary_table_hh)
     print(table_headhunter.table)
 
