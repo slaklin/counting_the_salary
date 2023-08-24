@@ -9,8 +9,7 @@ def calculates_the_number_vacancies_hh(language):
     vacancies_of_number = []
     information_about_vacancies = []
     page = 0
-    pages_number = 3
-    while page < pages_number:
+    while True:
         url = 'https://api.hh.ru/vacancies/'
         payload = {
             'text': f'{language}',
@@ -22,6 +21,8 @@ def calculates_the_number_vacancies_hh(language):
         page += 1
         information_about_vacancies.append(response.json())
         vacancies_of_number.append(response.json()['found'])
+        if response.json()['pages'] <= page:
+            break
     return vacancies_of_number, information_about_vacancies
 
 
@@ -48,8 +49,8 @@ def calculates_the_number_vacancies_sj(language, super_job_secret_key):
     vacancies_of_number = []
     information_about_vacancies = []
     page = 0
-    pages_number = 3
-    while page < pages_number:
+    next_page = True
+    while next_page:
         url = 'https://api.superjob.ru/2.0/vacancies/'
         headers = {
             'X-Api-App-Id': super_job_secret_key,
@@ -61,9 +62,11 @@ def calculates_the_number_vacancies_sj(language, super_job_secret_key):
         }
         response = requests.get(url, params=params, headers=headers)
         response.raise_for_status()
-        page += 1
         information_about_vacancies.append(response.json())
         vacancies_of_number.append(response.json()['total'])
+        next_page_available = response.json()['more']
+        next_page = next_page_available
+        page += 1
     return vacancies_of_number, information_about_vacancies
 
 
