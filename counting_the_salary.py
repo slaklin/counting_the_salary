@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 from terminaltables import AsciiTable
 
 
-def calculating_the_number_vacancies_hh(language):
+def calculates_the_number_vacancies_hh(language):
     vacancies_of_number = []
     information_about_vacancies = []
     page = 0
@@ -25,7 +25,7 @@ def calculating_the_number_vacancies_hh(language):
     return vacancies_of_number, information_about_vacancies
 
 
-def predict_rub_salary_for_hh(information_about_vacancies):
+def calculates_the_average_salary_hh(information_about_vacancies):
     average_salary = []
     for number in range(len(information_about_vacancies)):
         for vacancy in information_about_vacancies[number]['items']:
@@ -44,7 +44,7 @@ def predict_rub_salary_for_hh(information_about_vacancies):
     return average_salary
 
 
-def calculating_the_number_vacancies_sj(language):
+def calculates_the_number_vacancies_sj(language):
     load_dotenv()
     super_job_secret_key = os.getenv("SECRET_KEY")
     vacancies_of_number = []
@@ -69,7 +69,7 @@ def calculating_the_number_vacancies_sj(language):
     return vacancies_of_number, information_about_vacancies
 
 
-def predict_rub_salary_for_sj(information_about_vacancies):
+def calculates_the_average_salary_sj(information_about_vacancies):
     average_salary = []
     for number in range(len(information_about_vacancies)):
         for vacancy in information_about_vacancies[number]['objects']:
@@ -85,20 +85,19 @@ def predict_rub_salary_for_sj(information_about_vacancies):
     return average_salary
 
 
-def computation_work_for_vacancies(average_salary):
+def calculation_of_processed_vacancies(average_salary):
     vacancies_processed = 0
     specified_salary = []
-    list_jobs_with_salary = []
+    jobs_with_salary = []
     statistical_average_salary = []
     for amount_of_money in average_salary:
         if amount_of_money is not None:
             specified_salary.append(amount_of_money)
             vacancies_processed += amount_of_money
-    jobs_with_salary = (len(specified_salary))
-    list_jobs_with_salary.append(jobs_with_salary)
-    average_salary_the_specialty = vacancies_processed / jobs_with_salary
+    jobs_with_salary.append(len(specified_salary))
+    average_salary_the_specialty = vacancies_processed / (len(specified_salary))
     statistical_average_salary.append(int(average_salary_the_specialty))
-    return statistical_average_salary, list_jobs_with_salary
+    return statistical_average_salary, jobs_with_salary
 
 
 def main():
@@ -108,11 +107,11 @@ def main():
         ['Язык программирования', 'Вакансий найдено', 'Вакансий обработано', 'Средняя зарплата']
     ]
     for language in programming_languages:
-        vacancies_of_number, information_about_vacancies = calculating_the_number_vacancies_sj(language)
-        average_salary = predict_rub_salary_for_sj(information_about_vacancies)
-        statistical_average_salary, list_jobs_with_salary = computation_work_for_vacancies(average_salary)
+        vacancies_of_number, information_about_vacancies = calculates_the_number_vacancies_sj(language)
+        average_salary = calculates_the_average_salary_sj(information_about_vacancies)
+        statistical_average_salary, jobs_with_salary = calculation_of_processed_vacancies(average_salary)
         salary_table_sj.append(
-            [language, vacancies_of_number[0], list_jobs_with_salary[0], statistical_average_salary[0]]
+            [language, vacancies_of_number[0], jobs_with_salary[0], statistical_average_salary[0]]
         )
     table_superjob = AsciiTable(salary_table_sj)
     print(table_superjob.table)
@@ -122,11 +121,11 @@ def main():
         ['Язык программирования', 'Вакансий найдено', 'Вакансий обработано', 'Средняя зарплата']
     ]
     for language in programming_languages:
-        vacancies_of_number, information_about_vacancies = calculating_the_number_vacancies_hh(language)
-        average_salary = predict_rub_salary_for_hh(information_about_vacancies)
-        statistical_average_salary, list_jobs_with_salary = computation_work_for_vacancies(average_salary)
+        vacancies_of_number, information_about_vacancies = calculates_the_number_vacancies_hh(language)
+        average_salary = calculates_the_average_salary_hh(information_about_vacancies)
+        statistical_average_salary, jobs_with_salary = calculation_of_processed_vacancies(average_salary)
         salary_table_hh.append(
-            [language, vacancies_of_number[0], list_jobs_with_salary[0], statistical_average_salary[0]]
+            [language, vacancies_of_number[0], jobs_with_salary[0], statistical_average_salary[0]]
         )
     table_headhunter = AsciiTable(salary_table_hh)
     print(table_headhunter.table)
